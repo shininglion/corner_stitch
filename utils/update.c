@@ -185,7 +185,7 @@ void RemoveTile(Tile *tile, Plane *plane)
 	}
 	
 	// special case: 
-	if ( canMergeVertical(tp, RT(tp)) ) { TiJoinY(tp, RT(tp)); }
+	if ((TiGetBody(BL(RT(tp))) == SOLID_TILE) && canMergeVertical(tp, RT(tp)) ) { TiJoinY(tp, RT(tp)); }
 
 	// special case: the bottom of left_start is lower than del_ybot and the type of left_start is a space tile.
 	// We should first split left_start so that left_start will share the common bottom edge with the dead tile.
@@ -219,7 +219,7 @@ void RemoveTile(Tile *tile, Plane *plane)
 	// special case: the top of tp is higher than del_ytop and the type of tp is a space tile.
 	// We should also split tp so that tp will share the common top edge with the dead tile.
 	// Note: this is possible when there is another solid tile right above the dead tile with common left edge.
-	if ( (TiGetBody(tp) != SOLID_TILE) && (BOTTOM(tp) < del_ytop) ) {
+	if ( (TiGetBody(tp) != SOLID_TILE) && (BOTTOM(tp) > del_ytop) ) {
 		Tile *next = TiSplitY(tp, del_ytop);
 		TiJoinX(tp, TR(tp), plane);
 		tp = next;
@@ -259,8 +259,8 @@ static int deleteTile (Tile *tile, ClientData cdata)
 
 void RemoveTilePlane(Plane *plane)
 {
-	//Rect rect = { {MINFINITY + 1, MINFINITY + 1}, {INFINITY - 1, INFINITY - 1} };
-	Rect rect = { {0, 0}, {600, 400} };
+	Rect rect = { {MINFINITY + 1, MINFINITY + 1}, {INFINITY - 1, INFINITY - 1} };
+	//Rect rect = { {0, 0}, {600, 400} };
 	TiSrArea(NULL, plane, &rect, deleteTile, (ClientData)plane);
 	TiFree(plane->pl_hint);
 	TiFreePlane(plane);

@@ -10,7 +10,7 @@ SOURCE_CPP_FILES =\
   ./textio/txOutput.c\
   ./main.c
   
-CC = gcc -std=c99 -Wall -g
+CC = gcc -std=c99 -Wall -O2
 
 OUTPUT_OBJECT_OF_CPP_FILES = $(SOURCE_CPP_FILES:.c=.o)
 
